@@ -218,3 +218,17 @@ def error_check(mstruc,datstruc,rmsold,rmsnew,ITR,FACTI,OLDPAR,MCHS,ddx):
         print( '  Rms less than limit !!' )
         keepgoing = 0
     return mstruc,datstruc,keepgoing,ITR
+
+def process(mstruc, datstruc):
+    mstruc, datstruc = fillup( mstruc, datstruc )
+    iresl = abs( datstruc['wavel'][1] - datstruc['wavel'][0])
+    if iresl < 1:
+        iresl = 1
+    ifitres  = iresl
+    isampres = ifitres/iresl
+    rmsold   = rmserr( datstruc['fit'], datstruc['ratio'] )
+    fitflag  = 0
+    DoAgain = 1
+    print(iresl,isampres,rmsold)
+    mstruc,datstruc = stocfit( mstruc, datstruc, isampres)
+    return mstruc, datstruc
