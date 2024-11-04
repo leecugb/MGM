@@ -1,4 +1,83 @@
 import numpy as np
+wconst = 2.354820
+def init(points):
+    rmslim, rimplim = [0.002, 0.1E-04]
+    cp = np.array([0.47227115E+00,  -0.124962712E-05])
+    sp = np.array([0.5, 0.1E-04 ])
+    gcent=points
+    #gcent=np.array([8700,8800,9000,9150,9300,9450])
+    gfwhm = np.array([200]*len(points))
+    gstr  = np.array([-0.4]*len(points))
+    scent = np.array([100]*len(points))
+    sfwhm = np.array([300]*len(points))
+    sstr  = np.array([10]*len(points))
+    nbands =len(gcent)
+    nparam = 3*nbands + 2
+    mstruc={}
+    mstruc['cparam']  = cp[:2]
+    mstruc['sparam']  = sp[:2]
+    mstruc['rmslim']  = rmslim
+    mstruc['rimplim'] = rimplim
+    mstruc['gcent']   = gcent
+    mstruc['gfwhm']   = gfwhm
+    mstruc['gstr']    = gstr
+    mstruc['scent']   = scent
+    mstruc['sfwhm']   = sfwhm
+    mstruc['sstr']    = sstr
+    mstruc['gwidth'] = mstruc['gfwhm']/wconst
+    mstruc['gcentn'] = 1.0E7 /( mstruc['gcent'] ) # convert to wavenumber
+    params = np.zeros( nparam )
+    params[:nbands] = mstruc['gcentn']
+    params[nbands:2*nbands] = mstruc['gwidth']
+    params[2*nbands:3*nbands] = mstruc['gstr']
+    params[nparam-2:nparam] = mstruc['cparam']
+    mstruc['params']  = params
+    mstruc['nparam']  = nparam
+    mstruc['nbands']  = nbands
+    mstruc['std']     = np.zeros(nparam)
+#######################################
+    cmm = np.zeros(nparam)
+    mstruc['scent']=1.0E7 /(mstruc['gcent']-mstruc['scent'])-1.0E7 /(mstruc['gcent']+mstruc['scent'])
+    mstruc['sfwhm'] = mstruc['sfwhm']/wconst
+    cmm[:nbands] = mstruc['scent']
+    cmm[nbands:2*nbands] = mstruc['sfwhm']
+    cmm[2*nbands:3*nbands] = mstruc['sstr']
+    cmm[nparam-2:nparam] = mstruc['sparam']
+    mstruc['cmm'] = cmm
+    ipstat = np.zeros( nparam )
+    ipstat[:nbands ] = 1
+    ipstat[nbands:2*nbands ] = 2
+    ipstat[2*nbands:3*nbands ] = 3
+    ipstat[nparam-2:nparam ] = [4,5]
+    mstruc['ipstat'] = ipstat
+   ############################################## 
+    datarr=data
+    sz =  datarr.shape
+    errors='n'
+    if sz[1] > 2:
+        errors=input(' Use Errorbars (y or n) ?   ')
+    if errors=='Y' or errors=='y':
+        daterror = datarr[:,2]
+    else:
+        daterror = np.ones( sz[0] )
+    ratio = np.log( datarr[:,1] )
+    wavel = datarr[:,0]
+    waven = 1.0E7 /( wavel ) 
+    npnts = len( ratio )
+    datstruc={}
+    datstruc['ratio']   = ratio
+    datstruc['wavel']   = wavel
+    datstruc['waven']   = waven
+    datstruc['daterror'] = daterror
+    datstruc['fit']  = np.zeros(npnts)
+    datstruc['cont'] = np.zeros(npnts)
+    datstruc['resid'] = np.zeros(npnts)
+    datstruc['rcont']  = np.zeros(npnts)
+    datstruc['gline']    = np.zeros(npnts)
+    datstruc['gauss']    = np.zeros([npnts,nbands])
+    datstruc['npnts']    = npnts
+    return mstruc, datstruc
+
 def cgauss(x0, width, zintens, x):
 # CGAUSS(X0, width, str, X) gives the gaussian distribution over the elements
 # of X.
