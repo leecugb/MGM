@@ -12,4 +12,5 @@ x = x[(x>8.8) & (x<9.6)]*1000 #波长单位转为nm
 plt.plot(x, y)
 plt.xlabel("$ wavelength /\mu m$")
 plt.ylabel("$reflectance$")
+'''
 ![Uploading image.png…]()
