@@ -39,6 +39,7 @@ plt.xlabel("$wavelength /n m$")
 plt.ylabel("$normalized\ reflectance$")
 ```
 ![image](https://github.com/user-attachments/assets/08c91466-2977-4a9f-ba89-3055f80da689)
+
 对去除连续统的光谱执行高斯分解：
 ```python
 points=np.array([9430.15817393, 9299.41032439, 9156.58679071, 8987.87293269])
@@ -53,3 +54,5 @@ for i in datstruc['gauss'].T:
 plt.grid()
 plt.xlabel("$ wavelength /n m$")
 ```
+
+![image](https://github.com/user-attachments/assets/ccf92055-6911-4ea1-af67-c27750e10368)
