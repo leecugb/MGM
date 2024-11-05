@@ -1,3 +1,4 @@
+#代码改编自http://www.planetary.brown.edu/mgm/
 import numpy as np
 wconst = 2.354820
 def init(points):
