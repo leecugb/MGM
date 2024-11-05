@@ -1,5 +1,5 @@
 尽管可见光和近红外光谱中蕴含了能够反映物质成分和结构信息的吸收特征，但是解析一条复杂的光谱却是非平凡的。最初人们经常使用高斯模型来拟合吸收特征，后来发现它在某些场景中并不适用，于是Sunshine等人基于能量与平均键长之间的能量律关系提出了修正高斯模型（modified Gaussian model, MGM）。MGM在此后便主导了此类光谱解析工作，大量的使用MGM的文献不断涌现。
-下面结合热红外光谱分解给出MGM的python应用示例。
+下面结合热红外光谱分解给出MGM的python应用示例（代码改编自http://www.planetary.brown.edu/mgm/）。
 首先，读取一条由安捷伦4300实测的岩心波谱，截取其中8800-9600nm区间的光谱片段。
 ```python
 import pandas as pd
@@ -42,6 +42,7 @@ plt.ylabel("$normalized\ reflectance$")
 
 对去除连续统的光谱执行高斯分解：
 ```python
+from mgm import *
 points=np.array([9430.15817393, 9299.41032439, 9156.58679071, 8987.87293269])
 mstruc, datstruc=init(points)
 mstruc, datstruc=process(mstruc, datstruc)
